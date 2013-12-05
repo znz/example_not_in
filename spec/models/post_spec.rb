@@ -64,6 +64,38 @@ describe Post do
           expect(Post.not_voted_by(another_user.id).count).to eq(3)
         end
       end
+
+      context "with joins" do
+        #let(:scope) { Post.includes({ :votes => :voter }) }
+        #~> ActiveRecord::EagerLoadPolymorphicError:
+        #     Can not eagerly load the polymorphic association :voter
+
+        let(:scope) { Post.includes({ :votes => :voter }).joins(:votes) }
+
+        context "user" do
+          it "6 voted posts" do
+            expect(scope.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(6)
+          end
+          pending "9 unvoted posts" do
+            expect(scope.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(9)
+          end
+          it "9 not_voted posts" do
+            expect(scope.not_voted_by(user.id).count).to eq(9)
+          end
+        end
+
+        context "another_user" do
+          it "12 voted posts" do
+            expect(scope.search(votes_voter_id_in: another_user.id).result(distinct: true).count).to eq(12)
+          end
+          pending "3 unvoted posts" do
+            expect(scope.search(votes_voter_id_not_in: another_user.id).result(distinct: true).count).to eq(3)
+          end
+          it "3 not_voted posts" do
+            expect(scope.not_voted_by(another_user.id).count).to eq(3)
+          end
+        end
+      end
     end
   end
 end
