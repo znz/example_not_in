@@ -7,31 +7,40 @@ This is example app inclules failed specs.
 ## Failures log
 
 ```
+Pending:
+  Post with 15 posts 15 unvoted posts
+    # No reason given
+    # ./spec/models/post_spec.rb:22
+  Post with 15 posts with voted posts another_user 3 unvoted posts
+    # No reason given
+    # ./spec/models/post_spec.rb:60
+  Post with 15 posts with voted posts user 9 unvoted posts
+    # No reason given
+    # ./spec/models/post_spec.rb:48
+  Post with 15 posts with voted posts with joins user 9 unvoted posts
+    # No reason given
+    # ./spec/models/post_spec.rb:79
+  Post with 15 posts with voted posts with joins another_user 3 unvoted posts
+    # No reason given
+    # ./spec/models/post_spec.rb:91
+
 Failures:
 
-  1) Post with 2 posts two unvoted posts
-     Failure/Error: expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(2)
+  1) Post with 15 posts with voted posts with joins user 9 not_voted posts
+     Failure/Error: expect(scope.not_voted_by(user.id).count).to eq(9)
 
-       expected: 2
-            got: 0
-
-       (compared using ==)
-     # ./spec/models/post_spec.rb:22:in `block (3 levels) in <top (required)>'
-
-  2) Post with 2 posts with one voted post one unvoted post
-     Failure/Error: expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(1)
-
-       expected: 1
-            got: 0
+       expected: 9
+            got: 8
 
        (compared using ==)
-     # ./spec/models/post_spec.rb:31:in `block (4 levels) in <top (required)>'
+     # ./spec/models/post_spec.rb:83:in `block (6 levels) in <top (required)>'
 
-Finished in 0.21276 seconds
-7 examples, 2 failures
+  2) Post with 15 posts with voted posts with joins another_user 3 not_voted posts
+     Failure/Error: expect(scope.not_voted_by(another_user.id).count).to eq(3)
 
-Failed examples:
+       expected: 3
+            got: 2
 
-rspec ./spec/models/post_spec.rb:21 # Post with 2 posts two unvoted posts
-rspec ./spec/models/post_spec.rb:30 # Post with 2 posts with one voted post one unvoted post
+       (compared using ==)
+     # ./spec/models/post_spec.rb:95:in `block (6 levels) in <top (required)>'
 ```
