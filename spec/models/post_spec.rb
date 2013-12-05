@@ -19,7 +19,8 @@ describe Post do
      expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(0)
     end
     it "two unvoted posts" do
-     expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(2)
+     condition = { g: { '0' => { m: 'or', votes_voteable_id_null: true, votes_voter_id_not_in: user.id } } }
+     expect(Post.search(condition).result(distinct: true).count).to eq(2)
     end
     context "with one voted post" do
       before { user.vote_for(Post.first) }
@@ -28,7 +29,8 @@ describe Post do
         expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(1)
       end
       it "one unvoted post" do
-        expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(1)
+        condition = { g: { '0' => { m: 'or', votes_voteable_id_null: true, votes_voter_id_not_in: user.id } } }
+        expect(Post.search(condition).result(distinct: true).count).to eq(1)
       end
     end
   end
