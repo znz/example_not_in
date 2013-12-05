@@ -21,6 +21,10 @@ describe Post do
     it "two unvoted posts" do
      expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(2)
     end
+    it "two not_voted posts" do
+     expect(Post.not_voted_by(user.id).count).to eq(2)
+    end
+
     context "with one voted post" do
       before { user.vote_for(Post.first) }
 
@@ -29,6 +33,9 @@ describe Post do
       end
       it "one unvoted post" do
         expect(Post.search(votes_voter_id_not_in: user.id).result(distinct: true).count).to eq(1)
+      end
+      it "one not_voted post" do
+        expect(Post.not_voted_by(user.id).count).to eq(1)
       end
     end
   end
