@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Post do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it do
+    expect(FactoryGirl.create(:post)).to be_a Post
+  end
 end
