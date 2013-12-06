@@ -14,17 +14,23 @@ describe Post do
     let(:user) { FactoryGirl.create(:user) }
     let(:another_user) { FactoryGirl.create(:user) }
 
-    def not_voted_by_condition(user_id)
-     { g: { '0' => { m: 'or', votes_voteable_id_null: true, votes_voter_id_not_in: user_id } } }
+    def voted_by(user_id)
+      Post.search(votes_voter_id_in: user_id).result(distinct: true)
+    end
+
+    def not_voted_by(user_id)
+     Post.search({
+       g: { '0' => { m: 'or', votes_voteable_id_null: true, votes_voter_id_not_in: user_id } }
+     }).result(distinct: true)
     end
 
     it { expect(Post.count).to eq(15) }
 
     it "no voted posts" do
-     expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(0)
+      expect(voted_by(user.id).count).to eq(0)
     end
     it "15 not_voted posts" do
-     expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(15)
+      expect(not_voted_by(user.id).count).to eq(15)
     end
 
     context "with voted posts" do
@@ -44,19 +50,19 @@ describe Post do
 
       context "user" do
         it "6 voted posts" do
-          expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(6)
+          expect(voted_by(user.id).count).to eq(6)
         end
         it "9 not_voted posts" do
-          expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(9)
+          expect(not_voted_by(user.id).count).to eq(9)
         end
       end
 
       context "another_user" do
         it "12 voted posts" do
-          expect(Post.search(votes_voter_id_in: another_user.id).result(distinct: true).count).to eq(12)
+          expect(voted_by(another_user.id).count).to eq(12)
         end
         it "3 not_voted posts" do
-          expect(Post.search(not_voted_by_condition(another_user.id)).result(distinct: true).count).to eq(3)
+          expect(not_voted_by(another_user.id).count).to eq(3)
         end
       end
     end
