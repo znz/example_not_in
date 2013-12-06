@@ -21,7 +21,8 @@ describe Post do
     def not_voted_by(user_id)
       post_at = Post.arel_table
       post_id = post_at[:id]
-      arel = Post.where(post_id.not_in(voted_by(user_id).select(post_id).arel))
+      scope = Post.includes(:votes).references(:votes)
+      arel = scope.where(post_id.not_in(voted_by(user_id).select(post_id).arel))
       puts arel.to_sql
       arel
     end
