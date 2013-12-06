@@ -9,21 +9,21 @@ This is example app inclules failed specs.
 ```
 Failures:
 
-  1) Post with 15 posts with voted posts user 9 not_voted posts
-     Failure/Error: expect(not_voted_by(user.id).count).to eq(9)
+  1) Post with 15 posts with posts voted by both user 0 not_voted posts
+     Failure/Error: expect(not_voted_by(user.id).count).to eq(0)
 
-       expected: 9
-            got: 13
-
-       (compared using ==)
-     # ./spec/models/post_spec.rb:56:in `block (5 levels) in <top (required)>'
-
-  2) Post with 15 posts with voted posts another_user 3 not_voted posts
-     Failure/Error: expect(not_voted_by(another_user.id).count).to eq(3)
-
-       expected: 3
-            got: 7
+       expected: 0
+            got: 15
 
        (compared using ==)
-     # ./spec/models/post_spec.rb:65:in `block (5 levels) in <top (required)>'
+     # ./spec/models/post_spec.rb:72:in `block (5 levels) in <top (required)>'
+
+  2) Post with 15 posts with posts voted by both another_user no not_voted posts
+     Failure/Error: expect(not_voted_by(another_user.id).count).to eq(0)
+
+       expected: 0
+            got: 15
+
+       (compared using ==)
+     # ./spec/models/post_spec.rb:80:in `block (5 levels) in <top (required)>'
 ```
