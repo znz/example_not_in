@@ -19,9 +19,11 @@ describe Post do
     end
 
     def not_voted_by(user_id)
-     Post.search({
-       g: { '0' => { m: 'or', votes_voteable_id_null: true, votes_voter_id_not_in: user_id } }
-     }).result(distinct: true)
+      post_at = Post.arel_table
+      post_id = post_at[:id]
+      arel = Post.where(post_id.not_in(voted_by(user_id).select(post_id).arel))
+      puts arel.to_sql
+      arel
     end
 
     it { expect(Post.count).to eq(15) }
