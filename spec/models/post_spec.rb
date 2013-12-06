@@ -23,9 +23,6 @@ describe Post do
     it "no voted posts" do
      expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(0)
     end
-    pending "15 unvoted posts" do
-     expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(15)
-    end
     it "15 not_voted posts" do
      expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(15)
     end
@@ -49,9 +46,6 @@ describe Post do
         it "6 voted posts" do
           expect(Post.search(votes_voter_id_in: user.id).result(distinct: true).count).to eq(6)
         end
-        pending "9 unvoted posts" do
-          expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(9)
-        end
         it "9 not_voted posts" do
           expect(Post.search(not_voted_by_condition(user.id)).result(distinct: true).count).to eq(9)
         end
@@ -60,9 +54,6 @@ describe Post do
       context "another_user" do
         it "12 voted posts" do
           expect(Post.search(votes_voter_id_in: another_user.id).result(distinct: true).count).to eq(12)
-        end
-        pending "3 unvoted posts" do
-          expect(Post.search(not_voted_by_condition(another_user.id)).result(distinct: true).count).to eq(3)
         end
         it "3 not_voted posts" do
           expect(Post.search(not_voted_by_condition(another_user.id)).result(distinct: true).count).to eq(3)
