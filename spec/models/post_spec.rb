@@ -33,36 +33,51 @@ describe Post do
       expect(not_voted_by(user.id).count).to eq(15)
     end
 
-    context "with voted posts" do
+    context "with posts voted by another_user" do
       before do
-        posts = Post.all
-        # 1. 0: no votes
-        # 2. 1..2: vote by user
-        # 4. 3..6: vote by both
-        # 8. 7..14: vote by another_user
-        (1..6).each do |n|
-          user.vote_for(posts[n])
-        end
-        (3..14).each do |n|
-          another_user.vote_for(posts[n])
+        Post.all.each do |post|
+          another_user.vote_for(post)
         end
       end
-
       context "user" do
-        it "6 voted posts" do
-          expect(voted_by(user.id).count).to eq(6)
+        it "no voted posts" do
+          expect(voted_by(user.id).count).to eq(0)
         end
-        it "9 not_voted posts" do
-          expect(not_voted_by(user.id).count).to eq(9)
+        it "15 not_voted posts" do
+          expect(not_voted_by(user.id).count).to eq(15)
         end
       end
-
       context "another_user" do
-        it "12 voted posts" do
-          expect(voted_by(another_user.id).count).to eq(12)
+        it "15 voted posts" do
+          expect(voted_by(another_user.id).count).to eq(15)
         end
-        it "3 not_voted posts" do
-          expect(not_voted_by(another_user.id).count).to eq(3)
+        it "no not_voted posts" do
+          expect(not_voted_by(another_user.id).count).to eq(0)
+        end
+      end
+    end
+
+    context "with posts voted by both" do
+      before do
+        Post.all.each do |post|
+          user.vote_for(post)
+          another_user.vote_for(post)
+        end
+      end
+      context "user" do
+        it "15 voted posts" do
+          expect(voted_by(user.id).count).to eq(15)
+        end
+        it "0 not_voted posts" do
+          expect(not_voted_by(user.id).count).to eq(0)
+        end
+      end
+      context "another_user" do
+        it "15 voted posts" do
+          expect(voted_by(another_user.id).count).to eq(15)
+        end
+        it "no not_voted posts" do
+          expect(not_voted_by(another_user.id).count).to eq(0)
         end
       end
     end
