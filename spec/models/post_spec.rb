@@ -23,7 +23,7 @@ describe Post do
       post_id = post_at[:id]
       scope = Post.includes(:votes).references(:votes)
       arel = scope.where(post_id.not_in(voted_by(user_id).select(post_id).arel))
-      puts arel.to_sql
+      #puts arel.to_sql
       arel
     end
 
