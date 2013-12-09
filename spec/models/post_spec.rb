@@ -7,8 +7,10 @@ describe Post do
 
   context "with 15 posts" do
     before do
+      users = 15.times.map { FactoryGirl.create(:user) }
       15.times do
-        FactoryGirl.create(:post)
+        post = FactoryGirl.create(:post)
+        users.each { |u| u.vote_for(post) }
       end
     end
     let(:user) { FactoryGirl.create(:user) }
